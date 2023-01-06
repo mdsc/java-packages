@@ -1,2 +1,2 @@
 # java-packages
-The repository contains various java packages of a utility nature.
+Contains various java packages of a utility nature.
