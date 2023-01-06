@@ -1,2 +1,2 @@
 # java-packages
-Contains various java packages of a utility nature.
+This repository is intended to simply hold gradle and maven packages for various java libraries.
