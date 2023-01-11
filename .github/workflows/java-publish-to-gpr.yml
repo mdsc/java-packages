@@ -11,6 +11,7 @@ on:
         required: false
         default: '7.4.1'
         type: string
+
     secrets:
       gpr_actor:
         required: true
@@ -33,14 +34,6 @@ jobs:
         with:
           gradle-version: ${{ inputs.gradle_version }}
           arguments: jar
-
-      - name: Get Version
-        uses: paulhatch/semantic-version@v5.0.2
-
-      - name: Echo version
-        env:
-          version_output: $${ join(steps.get_version.outputs.*, '\n' }}
-        run: echo ${version_output}
 
       - name: Publish package
         uses: gradle/gradle-build-action@v2
