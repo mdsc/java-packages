@@ -1,0 +1,44 @@
+name: Java build and test
+
+on:
+  workflow_call:
+    inputs:
+      java_version:
+        required: false
+        default: '8'
+        type: string
+      gradle_version:
+        required: false
+        default: '7.4.1'
+        type: string
+    secrets:
+      gpr_actor:
+        required: true
+      gpr_token:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'corretto'
+
+      - name: Build jar file
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: ${{ inputs.gradle_version }}
+          arguments: jar
+
+      - name: Publish package
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+        with:
+          gradle-version: '7.4.1'
+          arguments: publish
