@@ -31,14 +31,6 @@ jobs:
       with:
         gradle-version: ${{ inputs.gradle_version }}
 
-    - name: Get Version
-      uses: paulhatch/semantic-version@v5.0.2
-
-    - name: Echo version
-      env:
-        version_output: $${ join(steps.get_version.outputs.*, '\n' }}
-      run: echo ${version_output}
-
     - name: Execute Gradle build action
       run: ./gradlew build
 
