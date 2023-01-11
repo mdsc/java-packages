@@ -11,11 +11,15 @@ on:
         required: false
         default: '7.4.1'
         type: string
+
 jobs:
+
   build-n-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Set up JDK 8
       uses: actions/setup-java@v3
       with:
@@ -26,6 +30,14 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: ${{ inputs.gradle_version }}
+
+    - name: Get Version
+      uses: paulhatch/semantic-version@v5.0.2
+
+    - name: Echo version
+      env:
+        version_output: $${ join(steps.get_version.outputs.*, '\n' }}
+      run: echo ${version_output}
 
     - name: Execute Gradle build action
       run: ./gradlew build
