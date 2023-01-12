@@ -19,7 +19,7 @@ on:
         required: true
 
 jobs:
-  publish:
+  build-test-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          arguments: jar
+          arguments: build
 
       - name: Publish package
         uses: gradle/gradle-build-action@v2
