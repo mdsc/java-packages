@@ -41,6 +41,7 @@ jobs:
       - name: Publish package
         uses: gradle/gradle-build-action@v2
         env:
+          TESTS_TO_SKIP: REGISTRY, DB
           GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
