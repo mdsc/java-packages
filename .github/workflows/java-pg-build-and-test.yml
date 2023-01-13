@@ -15,6 +15,12 @@ on:
         required: false
         default: 'postgres:13'
         type: string
+    secrets:
+      gpr_actor:
+        required: true
+      gpr_token:
+        required: true
+
 jobs:
 
   build-n-test:

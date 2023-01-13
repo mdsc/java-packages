@@ -11,7 +11,6 @@ on:
         required: false
         default: '7.4.1'
         type: string
-
     secrets:
       gpr_actor:
         required: true
@@ -19,6 +18,7 @@ on:
         required: true
 
 jobs:
+
   build-test-publish:
     runs-on: ubuntu-latest
     steps:

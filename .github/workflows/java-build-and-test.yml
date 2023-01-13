@@ -11,6 +11,11 @@ on:
         required: false
         default: '7.4.1'
         type: string
+    secrets:
+      gpr_actor:
+        required: true
+      gpr_token:
+        required: true
 
 jobs:
 

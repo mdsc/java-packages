@@ -15,7 +15,6 @@ on:
         required: false
         default: 'postgres:13'
         type: string
-
     secrets:
       gpr_actor:
         required: true
@@ -23,6 +22,7 @@ on:
         required: true
 
 jobs:
+
   build-test-publish:
     runs-on: ubuntu-latest
     services:
