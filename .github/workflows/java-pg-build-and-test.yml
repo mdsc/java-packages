@@ -11,11 +11,28 @@ on:
         required: false
         default: '7.4.1'
         type: string
-
+      postgres_image:
+        required: false
+        default: 'postgres:13'
+        type: string
 jobs:
 
   build-n-test:
     runs-on: ubuntu-latest
+    services:
+      myPostgres:
+        image: ${{ inputs.postgres_image }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: github!actions
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -25,6 +42,15 @@ jobs:
       with:
         java-version: ${{ inputs.java_version }}
         distribution: 'corretto'
+
+    - name: Setup Postgres using repo-specific script
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        POSTGRES_DB: postgres
+        POSTGRES_USER: postgres
+        PGPASSWORD: github!actions
+      run: ./scripts/setup-postgres.sh
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2

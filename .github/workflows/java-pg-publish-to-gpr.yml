@@ -1,0 +1,75 @@
+name: Java build and test
+
+on:
+  workflow_call:
+    inputs:
+      java_version:
+        required: false
+        default: '8'
+        type: string
+      gradle_version:
+        required: false
+        default: '7.4.1'
+        type: string
+      postgres_image:
+        required: false
+        default: 'postgres:13'
+        type: string
+
+    secrets:
+      gpr_actor:
+        required: true
+      gpr_token:
+        required: true
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    services:
+      myPostgres:
+        image: ${{ inputs.postgres_image }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: github!actions
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'corretto'
+
+      - name: Setup Postgres using repo-specific script
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          PGPASSWORD: github!actions
+        run: ./scripts/setup-postgres.sh
+
+      - name: Build jar file
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+        with:
+          gradle-version: ${{ inputs.gradle_version }}
+          arguments: build
+
+      - name: Publish package
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+        with:
+          gradle-version: '7.4.1'
+          arguments: publish
