@@ -58,14 +58,30 @@ jobs:
         PGPASSWORD: github!actions
       run: ./scripts/setup-postgres.sh
 
-    - name: Setup Gradle
+    - name: Build
       uses: gradle/gradle-build-action@v2
       env:
-        TESTS_TO_SKIP: REGISTRY
         GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
         GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
       with:
         gradle-version: ${{ inputs.gradle_version }}
-        arguments: build
+        arguments: build -x test
 
+    - name: Test
+      uses: gradle/gradle-build-action@v2
+      env:
+        GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+        GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+      with:
+        gradle-version: ${{ inputs.gradle_version }}
+        arguments: testWithDB
+
+    - name: Test
+      uses: gradle/gradle-build-action@v2
+      env:
+        GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+        GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+      with:
+        gradle-version: ${{ inputs.gradle_version }}
+        arguments: testWithDb
 

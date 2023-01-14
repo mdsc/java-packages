@@ -29,19 +29,27 @@ jobs:
           java-version: ${{ inputs.java_version }}
           distribution: 'corretto'
 
-      - name: Build jar file
+      - name: Build
         uses: gradle/gradle-build-action@v2
         env:
           GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          arguments: build
+          arguments: build -x test
 
-      - name: Publish package
+      - name: Test
         uses: gradle/gradle-build-action@v2
         env:
-          TESTS_TO_SKIP: REGISTRY, DB
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+        with:
+          gradle-version: ${{ inputs.gradle_version }}
+          arguments: test
+
+      - name: Publish
+        uses: gradle/gradle-build-action@v2
+        env:
           GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
