@@ -31,8 +31,11 @@ jobs:
         java-version: ${{ inputs.java_version }}
         distribution: 'corretto'
 
+    - name: Check distribution directory
+      run: mkdir ./distribution
+
     - name: Check keys directory
-      run: mkdir ./keys
+      run: mkdir ./distribution/keys
 
     - name: Build
       uses: gradle/gradle-build-action@v2
