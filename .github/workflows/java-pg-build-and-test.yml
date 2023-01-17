@@ -80,5 +80,5 @@ jobs:
         GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
       with:
         gradle-version: ${{ inputs.gradle_version }}
-        arguments: testWithDb
+        arguments: testWithDB
 
