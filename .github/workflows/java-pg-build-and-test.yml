@@ -82,3 +82,9 @@ jobs:
         gradle-version: ${{ inputs.gradle_version }}
         arguments: testWithDB
 
+    - name: Upload logs as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: logs
+        path: ./logs
+
