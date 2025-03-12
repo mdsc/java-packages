@@ -56,7 +56,7 @@ jobs:
         arguments: test
 
     - name: Upload logs as artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/pload-artifact@v4
       with:
         name: logs
         path: ./logs
