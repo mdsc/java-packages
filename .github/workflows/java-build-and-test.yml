@@ -9,7 +9,7 @@ on:
         type: string
       gradle_version:
         required: false
-        default: '7.4.1'
+        default: '8.1.1'
         type: string
     secrets:
       gpr_actor:
@@ -22,7 +22,7 @@ jobs:
   build-n-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up JDK
