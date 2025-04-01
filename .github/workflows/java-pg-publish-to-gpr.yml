@@ -64,6 +64,9 @@ jobs:
       - name: Check keys directory
         run: mkdir ./distribution/keys
 
+      - name: Check logs directory
+        run: mkdir ./logs
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
