@@ -67,23 +67,29 @@ jobs:
       - name: Create logs directory
         run: mkdir ./logs
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Build
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_DHHS_USERNAME: ${{ secrets.gpr_charm_actor }}
+          GITHUB_DHHS_TOKEN: ${{ secrets.gpr_charm_token }}
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_mdsc_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_mdsc_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          cache-read-only: false
-
-      - name: Build with Gradle
-        run: ./gradlew -x test
-        env:
-          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
-          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+          arguments: build -x test
 
       - name: Test
-        run: ./gradlew testWithDB
+        uses: gradle/gradle-build-action@v2
         env:
-          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
-          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+          GITHUB_DHHS_USERNAME: ${{ secrets.gpr_charm_actor }}
+          GITHUB_DHHS_TOKEN: ${{ secrets.gpr_charm_token }}
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_mdsc_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_mdsc_token }}
+          DB_APP_USERNAME: charm
+          DB_APP_PASSWORD: test!charm
+        with:
+          gradle-version: ${{ inputs.gradle_version }}
+          arguments: test testWithDB
 
       - name: Publish
         uses: ./gradlew publish
