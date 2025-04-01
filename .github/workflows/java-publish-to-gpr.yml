@@ -42,7 +42,7 @@ jobs:
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          arguments: build -x test
+          arguments: build -x test > ./logs/build.log
 
       - name: Test
         uses: gradle/gradle-build-action@v2
@@ -51,7 +51,7 @@ jobs:
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          arguments: test
+          arguments: test > ./logs/test.log
 
       - name: Publish
         uses: gradle/gradle-build-action@v2
