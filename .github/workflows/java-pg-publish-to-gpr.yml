@@ -81,8 +81,6 @@ jobs:
       - name: Test
         uses: gradle/gradle-build-action@v2
         env:
-          GITHUB_DHHS_USERNAME: ${{ secrets.gpr_charm_actor }}
-          GITHUB_DHHS_TOKEN: ${{ secrets.gpr_charm_token }}
           GITHUB_MDSC_USERNAME: ${{ secrets.gpr_mdsc_actor }}
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_mdsc_token }}
           DB_APP_USERNAME: charm
