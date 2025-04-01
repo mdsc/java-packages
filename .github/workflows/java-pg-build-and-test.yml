@@ -40,51 +40,51 @@ jobs:
           - 5432:5432
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: ${{ inputs.java_version }}
-        distribution: 'corretto'
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup Postgres using repo-specific script
-      env:
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
-        POSTGRES_DB: postgres
-        POSTGRES_USER: postgres
-        PGPASSWORD: github!actions
-      run: ./scripts/setup-postgres.sh
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: 'corretto'
 
-    - name: Check distribution directory
-      run: mkdir ./distribution
+      - name: Setup Postgres using repo-specific script
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          PGPASSWORD: github!actions
+        run: ./scripts/setup-postgres.sh
 
-    - name: Check keys directory
-      run: mkdir ./distribution/keys
+      - name: Check distribution directory
+        run: mkdir ./distribution
 
-    - name: Build
-      uses: gradle/gradle-build-action@v2
-      env:
-        GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
-        GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
-      with:
-        gradle-version: ${{ inputs.gradle_version }}
-        arguments: build -x test > ./logs/build.log
+      - name: Check keys directory
+        run: mkdir ./distribution/keys
 
-    - name: Test
-      uses: gradle/gradle-build-action@v2
-      env:
-        GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
-        GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
-      with:
-        gradle-version: ${{ inputs.gradle_version }}
-        arguments: testWithDB  > ./logs/test.log
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ inputs.gradle_version }}
 
-    - name: Upload logs as artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: logs
-        path: ./logs
+      - name: Build with Gradle
+        run: ./gradlew -x test
+        env:
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
 
+      - name: Test
+        run: ./gradlew testWithDB
+        env:
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+
+      - name: Upload logs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: ./logs
