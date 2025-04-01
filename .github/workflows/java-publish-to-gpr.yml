@@ -43,7 +43,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: ${{ inputs.gradle_version }}
-          cache-disabled: true
 
       - name: Build with Gradle
         run: ./gradlew -x test
@@ -62,8 +61,10 @@ jobs:
         env:
           GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
           GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
+          cache-read-only: false
 
       - name: Upload logs as artifacts
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: logs
