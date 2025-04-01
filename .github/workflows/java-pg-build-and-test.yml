@@ -5,7 +5,7 @@ on:
     inputs:
       java_version:
         required: false
-        default: '8'
+        default: '17'
         type: string
       gradle_version:
         required: false
@@ -70,19 +70,19 @@ jobs:
         run: mkdir ./logs
 
       - name: Build
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v2
         env:
-          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_mdsc_actor }}
-          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_mdsc_token }}
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
         with:
           gradle-version: ${{ inputs.gradle_version }}
           arguments: build -x test
 
       - name: Test
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v2
         env:
-          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_mdsc_actor }}
-          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_mdsc_token }}
+          GITHUB_MDSC_USERNAME: ${{ secrets.gpr_actor }}
+          GITHUB_MDSC_TOKEN: ${{ secrets.gpr_token }}
           DB_APP_USERNAME: charm
           DB_APP_PASSWORD: test!charm
         with:

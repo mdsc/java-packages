@@ -5,7 +5,7 @@ on:
     inputs:
       java_version:
         required: false
-        default: '8'
+        default: '17'
         type: string
       gradle_version:
         required: false
