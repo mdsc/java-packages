@@ -33,13 +33,13 @@ jobs:
           java-version: ${{ inputs.java_version }}
           distribution: 'corretto'
 
-      - name: Check distribution directory
+      - name: Create distribution directory
         run: mkdir ./distribution
 
-      - name: Check keys directory
+      - name: Create keys directory
         run: mkdir ./distribution/keys
 
-      - name: Check logs directory
+      - name: Create logs directory
         run: mkdir ./logs
 
       - name: Setup Gradle
