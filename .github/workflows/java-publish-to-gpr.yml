@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 8
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java_version }}
@@ -43,6 +43,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: ${{ inputs.gradle_version }}
+          cache-disabled: true
 
       - name: Build with Gradle
         run: ./gradlew -x test
